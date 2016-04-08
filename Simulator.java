@@ -32,9 +32,10 @@ public class Simulator {
     int exitSpeed = 9; // number of cars that can leave per minute
     int parkingPassProbability = 6;
     
-    private Parkingpass parkingPass;
+    
     public int totalRevenue;
     private int totalMinutes;
+    private ParkingPassController ppcontroller;
     private GUI gui;
 
     /**
@@ -45,11 +46,11 @@ public class Simulator {
         paymentCarQueue = new CarQueue();
         exitCarQueue = new CarQueue();
         simulatorView = new SimulatorView(3, 6, 30);
-        parkingPass = new Parkingpass();
         totalRevenue = 0;
         totalMinutes = 0;
-        gui = new GUI();
-        gui.openGUI();
+        ppcontroller = new ParkingPassController();
+        gui = new GUI(ppcontroller);
+        
     }
 
     /**
@@ -58,11 +59,7 @@ public class Simulator {
     public void run() {
         for (int i = 0; i < 10000; i++) {
             tick();
-            gui.textArea2.setText("Aantal auto's weggegaan met Parking Pass: " + Integer.toString(parkingPass.getAmountParkingPass()));
-            gui.textArea4.setText("Aantal auto's weggegaan zonder Parking Pass: " + Integer.toString(parkingPass.getAmountNoParkingPass()));
-            int totalMoney = totalRevenue / 100;
-            gui.textArea6.setText("Totale Omzet Prognose: €" + Integer.toString(totalMoney));
-
+            ppcontroller.updateView();
         }
     }
 
@@ -124,13 +121,15 @@ public class Simulator {
                 int stayMinutes = (int) (15 + random.nextFloat() * 10 * 60);
                 if(car instanceof AdHocCar)
                 {
+                    // A car should never pay more than 20 euros. 400 minutes is 20 euro's.
                     if(stayMinutes >= 400)
                     {
-                        totalRevenue += 2000;
+                        ppcontroller.maxSum();
                     }
                     else
                     {
-                        totalRevenue += stayMinutes * 5;
+                        ppcontroller.modifyMinutes(stayMinutes);
+                        ppcontroller.sumPrice();
                     }
                 }
                 car.setMinutesLeft(stayMinutes);
@@ -150,11 +149,11 @@ public class Simulator {
             if(car instanceof ParkingPassCar)
             {
                 exitCarQueue.addCar(car);
-                parkingPass.incrementParkingPass();
+                ppcontroller.incrementParkingPass();
             }
             else {
                 paymentCarQueue.addCar(car);
-                parkingPass.incrementNoParkingPass();
+                ppcontroller.incrementNoParkingPass();
             }
             car.setIsPaying(true);
         }
