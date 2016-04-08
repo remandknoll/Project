@@ -43,30 +43,65 @@ public class Simulator {
      */
     public Simulator() {
         entranceCarQueue = new CarQueue();
+        simulatorView = new SimulatorView(3, 6, 30);
+        
+        
+    }
+    /**
+     * Extra constructor
+     */
+     public Simulator(SimulatorView simulatorView) {
+        entranceCarQueue = new CarQueue();
+        this.simulatorView = simulatorView;
         paymentCarQueue = new CarQueue();
         exitCarQueue = new CarQueue();
-        simulatorView = new SimulatorView(3, 6, 30);
         totalRevenue = 0;
         totalMinutes = 0;
         ppcontroller = new ParkingPassController();
         gui = new GUI(ppcontroller);
-        
     }
-
+    
     /**
      * This is the run method; runs the simulation for a duration
      */
-    public void run() {
-        for (int i = 0; i < 10000; i++) {
+     public void run() {
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                for (int i = 0; i < 10000; i++) {
+            tick();
+            ppcontroller.updateView();
+            }
+            }
+        });
+        t.start();
+    }
+    
+    public void runOneStep() {
+        for (int i = 0; i < 1; i++) {
             tick();
             ppcontroller.updateView();
         }
     }
-
+   
+    /**
+     * This is the run method; runs the simulation for a duration
+     */
+     public void runMultipleSteps() {
+        for (int i = 0; i < 100; i++) {
+            tick();
+            ppcontroller.updateView();
+        }
+    }
+    
+    public void stop() {
+      
+        
+    }
+   
     /**
      * This is the tick method; calculates the times in minutes, hours and days
      */
-    private void tick() {
+    public void tick() {
         // Advance the time by one minute.
         minute++;
         while (minute > 59) {

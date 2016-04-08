@@ -17,6 +17,11 @@ public class SimulatorView extends JFrame {
     private int numberOfRows;
     private int numberOfPlaces;
     private Car[][][] cars;
+    public static JButton b1;
+    public static JButton b2;
+    public static JButton b3;
+    public static JButton b4;
+    private JLabel l1;
 
     /**
      * Constructor of the class SimulatorView
@@ -31,12 +36,48 @@ public class SimulatorView extends JFrame {
         cars = new Car[numberOfFloors][numberOfRows][numberOfPlaces];
         
         carParkView = new CarParkView();
+        carParkView.setLayout(null);
+        
+        // start button
+        b1 = new JButton("Activeer garage");
+        b1.setSize(150,25);
+        b1.setLocation(20,380);
+        b1.addActionListener(new Action(this));
+        carParkView.add(b1);
+        
+        // one step button
+        b2 = new JButton("One step");
+        b2.setSize(150,25);
+        b2.setLocation(190,380);
+        b2.addActionListener(new Action(this));
+        carParkView.add(b2);
+        
+        //multiple steps button
+        b3 = new JButton("Multiple steps");
+        b3.setSize(150,25);
+        b3.setLocation(360,380);
+        b3.addActionListener(new Action(this));
+        carParkView.add(b3);
+        
+        //stop button
+        b4 = new JButton("Stop/pause");
+        b4.setSize(150,25);
+        b4.setLocation(520,380);
+        b4.addActionListener(new Action(this));
+        carParkView.add(b4);
+        
+        //label intro
+        l1 = new JLabel("Welkom bij de monitoor software van Q-city parking garage Groningen!");
+        l1.setSize(600,20);
+        l1.setLocation(20,20);
+        carParkView.add(l1);
 
         Container contentPane = getContentPane();
         //contentPane.add(stepLabel, BorderLayout.NORTH);
         contentPane.add(carParkView, BorderLayout.CENTER);
         //contentPane.add(population, BorderLayout.SOUTH);
         pack();
+        setResizable(false);
         setVisible(true);
  
         updateView();
@@ -207,7 +248,7 @@ public class SimulatorView extends JFrame {
          * Overridden. Tell the GUI manager how big we would like to be.
          */
         public Dimension getPreferredSize() {
-            return new Dimension(800, 500);
+            return new Dimension(800, 400);
         }
     
         /**
@@ -241,7 +282,7 @@ public class SimulatorView extends JFrame {
                     for(int place = 0; place < getNumberOfPlaces(); place++) {
                         Location location = new Location(floor, row, place);
                         Car car = getCarAt(location);
-                        Color color = car == null ? Color.white : Color.red;
+                        Color color = car == null ? Color.white : Color.blue;
                         drawPlace(graphics, location, color);
                     }
                 }
@@ -262,4 +303,34 @@ public class SimulatorView extends JFrame {
         }
     }
 
+}
+
+class Action implements ActionListener {
+   
+    private SimulatorView simulatorView;
+   
+    public Action(SimulatorView simulatorView) {
+        this.simulatorView = simulatorView;
+    }
+   
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == SimulatorView.b1) {
+            Simulator sim = new Simulator(simulatorView);
+            
+            sim.run();
+        }
+        if (e.getSource() == SimulatorView.b2) {
+            Simulator sim = new Simulator(simulatorView);
+            
+            sim.runOneStep();
+        }
+        if (e.getSource() == SimulatorView.b3) {
+            Simulator sim = new Simulator(simulatorView);
+            
+            sim.runMultipleSteps();
+        }
+        if (e.getSource() == SimulatorView.b4) {
+            // hier is de actie
+        }
+}
 }

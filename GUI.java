@@ -26,7 +26,7 @@ public class GUI
         passcontroller = controller;
         parkingview = passcontroller.getPass();
         revenueview = passcontroller.getRevenue();
-        frame3 = new JFrame("AmountofregularCars");
+        frame3 = new JFrame("Auto's die weggaan");
         frame3.setLayout(new BoxLayout(frame3, BoxLayout.PAGE_AXIS));
         frame3.getContentPane().setLayout(new BoxLayout(frame3.getContentPane(), BoxLayout.PAGE_AXIS));
         Container contentPane3 = frame3.getContentPane();
@@ -36,6 +36,7 @@ public class GUI
         contentPane3.add(revenueview.textArea5);
         contentPane3.add(revenueview.textArea6);
         frame3.pack();
+        frame3.setResizable(false);
         frame3.setVisible(true);
     }
     
