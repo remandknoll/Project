@@ -1,8 +1,0 @@
-#BlueJ class context
-comment0.params=car
-comment0.target=boolean\ addCar(Car)
-comment0.text=\r\n\ This\ is\ the\ addCar\ method;\ this\ adds\ a\ car\ given\ by\ the\ parameters\ to\ the\ queue\r\n\ @param\ adds\ the\ car\ given\ by\ user\ input\ in\ the\ parameters\ \r\n\ @return\ car\ added\ or\ not\ (true\ or\ false)\r\n
-comment1.params=
-comment1.target=Car\ removeCar()
-comment1.text=\r\nThis\ is\ the\ removeCar\ method;\ this\ removes\ the\ car\ out\ of\ the\ queue\r\n\ @return\ car\ from\ the\ queue\r\n
-numComments=2
